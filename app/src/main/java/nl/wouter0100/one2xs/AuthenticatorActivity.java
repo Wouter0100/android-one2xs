@@ -12,7 +12,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 
 import nl.wouter0100.one2xs.exceptions.LoginException;
 import nl.wouter0100.one2xs.utilities.LoginUtilities;
@@ -50,6 +52,14 @@ public class AuthenticatorActivity extends AppCompatActivity {
         mAccountManager = AccountManager.get(getBaseContext());
         mUsernameLayout = (TextInputLayout) findViewById(R.id.text_username);
         mPasswordLayout = (TextInputLayout) findViewById(R.id.text_password);
+
+        // Set username when it's found
+        String username = getIntent().getStringExtra(ARG_ACCOUNT_NAME);
+        if (username != null) {
+            EditText usernameField = mUsernameLayout.getEditText();
+            usernameField.setInputType(InputType.TYPE_NULL);
+            usernameField.setText(username);
+        }
 
         // Some logic from the AccountAuthenticatorActivity because we want the AppCompactActivity
         mAccountAuthenticatorResponse =
@@ -165,23 +175,23 @@ public class AuthenticatorActivity extends AppCompatActivity {
     /**
      * Finish the login
      *
-     * @param res Intent with all the necessary data
+     * @param intent Intent with all the necessary data
      */
-    private void finishLogin(Intent res) {
+    private void finishLogin(Intent intent) {
 
-        String username = res.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-        String password = res.getStringExtra(AuthenticatorActivity.ARG_PASSWORD);
-        String authToken = res.getStringExtra(AccountManager.KEY_AUTHTOKEN);
-        String accountType = res.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
+        String username = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String password = intent.getStringExtra(AuthenticatorActivity.ARG_PASSWORD);
+        String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
+        String accountType = intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
 
         Account account = new Account(username, accountType);
 
-        mAccountManager.addAccountExplicitly(account, password, null);
-
-        final Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-        intent.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
+        if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
+            mAccountManager.addAccountExplicitly(account, password, null);
+            mAccountManager.setAuthToken(account, One2xsAuthenticator.AUTHTOKEN_TYPE, authToken);
+        } else {
+            mAccountManager.setPassword(account, password);
+        }
         
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
