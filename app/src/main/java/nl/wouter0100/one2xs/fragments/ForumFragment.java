@@ -1,5 +1,7 @@
 package nl.wouter0100.one2xs.fragments;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -16,6 +18,9 @@ import nl.wouter0100.one2xs.models.Forum;
  * Forum Fragment, views a list of forums within a section
  */
 public class ForumFragment extends ListFragment {
+
+    // Listener to talk with our activity
+    private OnForumInteractionListener mListener;
 
     // Holds the forums this Fragment is displaying
     private Forum[] mForums;
@@ -73,5 +78,28 @@ public class ForumFragment extends ListFragment {
         Forum forum = mForums[position];
 
         Log.i("FragmentList", "Item clicked: " + forum.getName());
+
+        mListener.onForumSelected(forum);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnForumInteractionListener) {
+            mListener = (OnForumInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnForumInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnForumInteractionListener {
+        void onForumSelected(Forum forum);
     }
 }

@@ -15,6 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,11 +31,15 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 
 import nl.wouter0100.one2xs.adapters.UserSyncAdapter;
+import nl.wouter0100.one2xs.fragments.ForumFragment;
 import nl.wouter0100.one2xs.fragments.SectionFragment;
+import nl.wouter0100.one2xs.fragments.ThreadFragment;
+import nl.wouter0100.one2xs.models.Forum;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        SectionFragment.OnFragmentInteractionListener {
+        ForumFragment.OnForumInteractionListener,
+        FragmentManager.OnBackStackChangedListener {
 
     private AccountManager mAccountManager;
     private Account mAccount;
@@ -45,32 +50,46 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;
 
     private BroadcastReceiver mUserSyncFinishedReceiver;
+    private FragmentManager mFragmentManager;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Get and set application context
         mContext = getApplicationContext();
 
+        // Get and set fragment manager
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.addOnBackStackChangedListener(this);
+
+        // Get account manager and all our accounts
+        mAccountManager = AccountManager.get(mContext);
+
+        // Toolbar stuff
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        // Connect drawer
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                mFragmentManager.popBackStack();
             }
         });
+        mDrawerToggle.syncState();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        // Floaitng action button stuff
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        mFloatingActionButton.setVisibility(View.INVISIBLE);
 
+        // Navigation
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
@@ -78,8 +97,7 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.getMenu().getItem(0).setChecked(true);
         onNavigationItemSelected(mNavigationView.getMenu().getItem(0));
 
-        // Get account manager and all our accounts
-        mAccountManager = AccountManager.get(getBaseContext());
+        shouldDisplayHomeUp();
     }
 
     @Override
@@ -221,17 +239,47 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_content, fragment).commit();
+        //Clear back stack
+        for(int i = 0; i < mFragmentManager.getBackStackEntryCount(); ++i) {
+            mFragmentManager.popBackStack();
+        }
+
+        // Commit new fragment
+        mFragmentManager.beginTransaction().replace(R.id.fragment_content, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /**
+     * Listener for when a user selects a forum
+     *
+     * @param forum Forum to load
+     */
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onForumSelected(Forum forum) {
+        Fragment fragment = ThreadFragment.newInstance(forum);
 
+        mFragmentManager.beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        shouldDisplayHomeUp();
+    }
+
+    public void shouldDisplayHomeUp(){
+        //Enable Up button only if there are entries in the back stack
+        boolean canBack = getSupportFragmentManager().getBackStackEntryCount() > 0;
+
+        mDrawerToggle.setDrawerIndicatorEnabled(!canBack);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canBack);
+
+        // Resync state
+        if (!canBack) {
+            mDrawerToggle.syncState();
+        }
     }
 }

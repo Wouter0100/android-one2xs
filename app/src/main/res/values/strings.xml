@@ -22,4 +22,7 @@
     <string name="provider_user">User details</string>
     <string name="click_sign_in">Click to sign in</string>
     <string name="still_receiving">Please wait, receiving..</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
