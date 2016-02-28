@@ -65,7 +65,7 @@ public class One2xsAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        System.out.println("authtoken called");
+
         // Check if correct authtoken type
         if (!authTokenType.equals(One2xsAuthenticator.AUTHTOKEN_TYPE)) {
             // If not, return error

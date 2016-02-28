@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onClick(View v) {
-                    System.out.println("Navigation Header called");
                     mAccountManager.addAccount(One2xsAuthenticator.ACCOUNT_TYPE, One2xsAuthenticator.AUTHTOKEN_TYPE, null, null, MainActivity.this, null, null);
                 }
             });
