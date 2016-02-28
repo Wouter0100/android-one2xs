@@ -50,8 +50,8 @@ public class AuthenticatorActivity extends AppCompatActivity {
 
         // Set all private variables
         mAccountManager = AccountManager.get(getBaseContext());
-        mUsernameLayout = (TextInputLayout) findViewById(R.id.text_username);
-        mPasswordLayout = (TextInputLayout) findViewById(R.id.text_password);
+        mUsernameLayout = (TextInputLayout) findViewById(R.id.input_text_username);
+        mPasswordLayout = (TextInputLayout) findViewById(R.id.input_text_password);
 
         // Set username when it's found
         String username = getIntent().getStringExtra(ARG_ACCOUNT_NAME);

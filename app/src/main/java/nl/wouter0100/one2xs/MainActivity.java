@@ -1,6 +1,8 @@
 package nl.wouter0100.one2xs;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import nl.wouter0100.one2xs.fragments.ForumFragment;
 
@@ -24,17 +29,24 @@ public class MainActivity extends AppCompatActivity
         ForumFragment.OnFragmentInteractionListener {
 
     private AccountManager mAccountManager;
-    private FloatingActionButton fab;
+    private Account mAccount;
+
+    private Context mContext;
+
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = getApplicationContext();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -51,7 +63,39 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // First page is the Forum..
+        navigationView.getMenu().getItem(0).setChecked(true);
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
+        // Get account manager and all our accounts
         mAccountManager = AccountManager.get(getBaseContext());
+        Account[] accounts = mAccountManager.getAccounts();
+
+        View navigationHeader = navigationView.getHeaderView(0);
+
+        if (accounts.length >= 1) {
+            // Always use first account
+            mAccount = accounts[0];
+
+            if (accounts.length >= 2) {
+                // Show Toast that only one account is allowed
+                Toast.makeText(mContext, R.string.one_account_allowed, Toast.LENGTH_LONG).show();
+            }
+
+            TextView usernameView = (TextView) navigationHeader.findViewById(R.id.text_username);
+
+            usernameView.setText(mAccount.name);
+        } else {
+            // No accounts yet
+            navigationHeader.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    System.out.println("Navigation Header called");
+                    mAccountManager.addAccount(One2xsAuthenticator.ACCOUNT_TYPE, One2xsAuthenticator.AUTHTOKEN_TYPE, null, null, MainActivity.this, null, null);
+                }
+            });
+        }
     }
 
     @Override
