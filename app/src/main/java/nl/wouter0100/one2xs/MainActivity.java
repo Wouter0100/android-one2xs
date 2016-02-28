@@ -74,8 +74,15 @@ public class MainActivity extends AppCompatActivity
 
         // Get account manager and all our accounts
         mAccountManager = AccountManager.get(getBaseContext());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         Account[] accounts = mAccountManager.getAccounts();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View navigationHeader = navigationView.getHeaderView(0);
 
         if (accounts.length >= 1) {
