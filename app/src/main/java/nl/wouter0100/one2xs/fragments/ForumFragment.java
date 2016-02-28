@@ -12,14 +12,16 @@ import android.widget.ListView;
 import nl.wouter0100.one2xs.R;
 import nl.wouter0100.one2xs.models.Forum;
 
+/**
+ * Forum Fragment, views a list of forums within a section
+ */
 public class ForumFragment extends ListFragment {
 
     // Holds the forums this Fragment is displaying
     private Forum[] mForums;
 
     /**
-     * Create a new instance of CountingFragment, providing "num"
-     * as an argument.
+     * Create a new instance of ForumFragment
      *
      * @param forums An subforum object with all necressey details
      */
@@ -34,7 +36,7 @@ public class ForumFragment extends ListFragment {
     }
 
     /**
-     * When creating, retrieve this instance's number from its arguments.
+     * When creating, retrieve this forums from the bundles
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,7 @@ public class ForumFragment extends ListFragment {
     }
 
     /**
-     * The Fragment's UI is just a simple text view showing its
-     * instance number.
+     * The Fragment's UI is just a simple list.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +54,9 @@ public class ForumFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_forum, container, false);
     }
 
+    /**
+     * Set a list of the mForums
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -61,8 +65,13 @@ public class ForumFragment extends ListFragment {
                 android.R.layout.simple_list_item_1, mForums));
     }
 
+    /**
+     * On click handler for the list
+     */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.i("FragmentList", "Item clicked: " + id);
+        Forum forum = mForums[position];
+
+        Log.i("FragmentList", "Item clicked: " + forum.getName());
     }
 }

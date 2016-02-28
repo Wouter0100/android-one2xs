@@ -16,12 +16,7 @@ import nl.wouter0100.one2xs.models.Forum;
 import nl.wouter0100.one2xs.models.Section;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SectionFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SectionFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * SectionFragment, shows the sections and within it there forums
  */
 public class SectionFragment extends Fragment {
 
@@ -38,10 +33,9 @@ public class SectionFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param subforum Enum of subforum to display
      * @return A new instance of fragment SectionFragment.
      */
-    public static SectionFragment newInstance(String subforum) {
+    public static SectionFragment newInstance() {
         return new SectionFragment();
     }
 
