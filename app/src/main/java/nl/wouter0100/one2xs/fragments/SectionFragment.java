@@ -56,6 +56,7 @@ public class SectionFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_section, container, false);
 
+        // TODO: automatically receive from one2xs, it may be different depending on the user
         Section[] sections = new Section[3];
 
         Forum[] algemeenForums = new Forum[4];
