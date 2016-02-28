@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,11 +25,14 @@ import org.jsoup.select.Elements;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import nl.wouter0100.one2xs.MainActivity;
 import nl.wouter0100.one2xs.One2xsAuthenticator;
 import nl.wouter0100.one2xs.utilities.LoginUtilities;
 import nl.wouter0100.one2xs.utilities.RequestUtilities;
 
 public class UserSyncAdapter extends AbstractThreadedSyncAdapter {
+
+    public static final String FINISHED = "FINISHED";
 
     private final AccountManager mAccountManager;
     private final Context mContext;
@@ -109,6 +113,11 @@ public class UserSyncAdapter extends AbstractThreadedSyncAdapter {
             avatarBitmap.compress(Bitmap.CompressFormat.PNG, 100, avatarOutputStream);
 
             avatarOutputStream.close();
+
+            // Notify front-end
+            Intent intent = new Intent();
+            intent.setAction(UserSyncAdapter.FINISHED);
+            mContext.sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
         }

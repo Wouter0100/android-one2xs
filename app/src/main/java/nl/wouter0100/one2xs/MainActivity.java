@@ -2,7 +2,10 @@ package nl.wouter0100.one2xs;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 
+import nl.wouter0100.one2xs.adapters.UserSyncAdapter;
 import nl.wouter0100.one2xs.fragments.SectionFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -38,6 +42,9 @@ public class MainActivity extends AppCompatActivity
     private Context mContext;
 
     private FloatingActionButton mFloatingActionButton;
+    private NavigationView mNavigationView;
+
+    private BroadcastReceiver mUserSyncFinishedReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +71,12 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         // First page is the Forum..
-        navigationView.getMenu().getItem(0).setChecked(true);
-        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+        mNavigationView.getMenu().getItem(0).setChecked(true);
+        onNavigationItemSelected(mNavigationView.getMenu().getItem(0));
 
         // Get account manager and all our accounts
         mAccountManager = AccountManager.get(getBaseContext());
@@ -81,8 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         Account[] accounts = mAccountManager.getAccounts();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View navigationHeader = navigationView.getHeaderView(0);
+        View navigationHeader = mNavigationView.getHeaderView(0);
 
         if (accounts.length >= 1) {
             // Always use first account
@@ -94,28 +100,26 @@ public class MainActivity extends AppCompatActivity
             }
 
             // Make some items visible, just to be sure it's there
-            navigationView.getMenu().getItem(1).setVisible(true);
+            mNavigationView.getMenu().getItem(1).setVisible(true);
 
-            // Get all required views we need to modify
-            TextView usernameView = (TextView) navigationHeader.findViewById(R.id.text_username);
-            TextView statusView = (TextView) navigationHeader.findViewById(R.id.text_status);
-            ImageView avatarView = (ImageView) navigationHeader.findViewById(R.id.image_avatar);
+            setUserDetails();
 
-            // Set all views values
-            usernameView.setText(mAccount.name);
-            statusView.setText(mAccountManager.getUserData(mAccount, "status"));
+            mUserSyncFinishedReceiver = new BroadcastReceiver(){
 
-            try {
-                Bitmap avatar = BitmapFactory.decodeStream(mContext.openFileInput("avatar.png"));
-                avatarView.setImageBitmap(avatar);
-            } catch (FileNotFoundException e) {
-                // avatar not found
-            }
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    setUserDetails();
+                }
+            };
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(UserSyncAdapter.FINISHED);
+            mContext.registerReceiver(mUserSyncFinishedReceiver, intentFilter);
         } else {
             // No accounts yet
 
             // Make some items invisible
-            navigationView.getMenu().getItem(1).setVisible(false);
+            mNavigationView.getMenu().getItem(1).setVisible(false);
 
             // Set on click for when a user clicks the header
             navigationHeader.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +129,35 @@ public class MainActivity extends AppCompatActivity
                     mAccountManager.addAccount(One2xsAuthenticator.ACCOUNT_TYPE, One2xsAuthenticator.AUTHTOKEN_TYPE, null, null, MainActivity.this, null, null);
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mUserSyncFinishedReceiver != null) {
+            mContext.unregisterReceiver(mUserSyncFinishedReceiver);
+        }
+    }
+
+    private void setUserDetails() {
+        View navigationHeader = mNavigationView.getHeaderView(0);
+
+        // Get all required views we need to modify
+        TextView usernameView = (TextView) navigationHeader.findViewById(R.id.text_username);
+        TextView statusView = (TextView) navigationHeader.findViewById(R.id.text_status);
+        ImageView avatarView = (ImageView) navigationHeader.findViewById(R.id.image_avatar);
+
+        // Set all views values
+        usernameView.setText(mAccount.name);
+        statusView.setText(mAccountManager.getUserData(mAccount, "status"));
+
+        try {
+            Bitmap avatar = BitmapFactory.decodeStream(mContext.openFileInput("avatar.png"));
+            avatarView.setImageBitmap(avatar);
+        } catch (FileNotFoundException e) {
+            // avatar not found
         }
     }
 
