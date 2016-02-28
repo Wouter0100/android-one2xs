@@ -21,17 +21,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 
-import nl.wouter0100.one2xs.fragments.ForumFragment;
+import nl.wouter0100.one2xs.fragments.SectionFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ForumFragment.OnFragmentInteractionListener {
+        SectionFragment.OnFragmentInteractionListener {
 
     private AccountManager mAccountManager;
     private Account mAccount;
@@ -94,10 +93,15 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(mContext, R.string.one_account_allowed, Toast.LENGTH_LONG).show();
             }
 
+            // Make some items visible, just to be sure it's there
+            navigationView.getMenu().getItem(1).setVisible(true);
+
+            // Get all required views we need to modify
             TextView usernameView = (TextView) navigationHeader.findViewById(R.id.text_username);
             TextView statusView = (TextView) navigationHeader.findViewById(R.id.text_status);
             ImageView avatarView = (ImageView) navigationHeader.findViewById(R.id.image_avatar);
 
+            // Set all views values
             usernameView.setText(mAccount.name);
             statusView.setText(mAccountManager.getUserData(mAccount, "status"));
 
@@ -109,6 +113,11 @@ public class MainActivity extends AppCompatActivity
             }
         } else {
             // No accounts yet
+
+            // Make some items invisible
+            navigationView.getMenu().getItem(1).setVisible(false);
+
+            // Set on click for when a user clicks the header
             navigationHeader.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -163,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_forum:
-                fragmentClass = ForumFragment.class;
+                fragmentClass = SectionFragment.class;
                 break;
 
             case R.id.nav_messages:
