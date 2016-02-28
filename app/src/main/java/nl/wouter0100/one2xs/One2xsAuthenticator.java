@@ -8,22 +8,17 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.widget.Toast;
 
-import nl.wouter0100.one2xs.exceptions.AuthTokenException;
 import nl.wouter0100.one2xs.utilities.LoginUtilities;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 
 public class One2xsAuthenticator extends AbstractAccountAuthenticator {
 
-    private static final int ERROR_ONE_ACCOUNT_ALLOWED = 2001;
-
     public static final String AUTHTOKEN_TYPE = "nl.wouter0100.one2xs";
     public static final String ACCOUNT_TYPE = "nl.wouter0100.one2xs";
-
+    private static final int ERROR_ONE_ACCOUNT_ALLOWED = 2001;
     private final Context mContext;
     private final AccountManager mAccountManager;
 

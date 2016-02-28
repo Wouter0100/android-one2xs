@@ -192,7 +192,7 @@ public class AuthenticatorActivity extends AppCompatActivity {
         } else {
             mAccountManager.setPassword(account, password);
         }
-        
+
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
