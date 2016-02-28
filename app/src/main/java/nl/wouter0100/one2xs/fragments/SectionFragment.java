@@ -87,11 +87,16 @@ public class SectionFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mPager);
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         // Set Title and back button correct
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         ActionBar actionBar = activity.getSupportActionBar();
-        actionBar.setTitle("Forum");
-
-        return view;
+        actionBar.setTitle(R.string.forum);
     }
 }

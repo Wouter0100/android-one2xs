@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ import java.io.FileNotFoundException;
 
 import nl.wouter0100.one2xs.adapters.UserSyncAdapter;
 import nl.wouter0100.one2xs.fragments.ForumFragment;
+import nl.wouter0100.one2xs.fragments.MessageFragment;
 import nl.wouter0100.one2xs.fragments.SectionFragment;
 import nl.wouter0100.one2xs.fragments.ThreadFragment;
 import nl.wouter0100.one2xs.models.Forum;
@@ -39,6 +41,7 @@ import nl.wouter0100.one2xs.models.Forum;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ForumFragment.OnForumInteractionListener,
+        MessageFragment.OnMessageInteractionListener,
         FragmentManager.OnBackStackChangedListener {
 
     private AccountManager mAccountManager;
@@ -229,7 +232,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_messages:
-
+                fragmentClass = MessageFragment.class;
                 break;
         }
 
@@ -252,18 +255,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /**
-     * Listener for when a user selects a forum
-     *
-     * @param forum Forum to load
-     */
-    @Override
-    public void onForumSelected(Forum forum) {
-        Fragment fragment = ThreadFragment.newInstance(forum);
-
-        mFragmentManager.beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
-    }
-
     @Override
     public void onBackStackChanged() {
         shouldDisplayHomeUp();
@@ -281,5 +272,28 @@ public class MainActivity extends AppCompatActivity
         if (!canBack) {
             mDrawerToggle.syncState();
         }
+    }
+
+    /**
+     * Listener for when a user selects a forum
+     *
+     * @param forum Forum to load
+     */
+    @Override
+    public void onForumSelected(Forum forum) {
+        Fragment fragment = ThreadFragment.newInstance(forum);
+
+        mFragmentManager.beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+    }
+
+    /**
+     * Listener for when a user clicks a message
+     *
+     * @param id Id of the message to load
+     * @param title Title of the message to load
+     */
+    @Override
+    public void onMessageClicked(int id, String title) {
+
     }
 }
