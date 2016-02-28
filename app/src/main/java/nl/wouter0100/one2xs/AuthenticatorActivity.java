@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -192,6 +193,8 @@ public class AuthenticatorActivity extends AppCompatActivity {
         } else {
             mAccountManager.setPassword(account, password);
         }
+
+        ContentResolver.setSyncAutomatically(account, "nl.wouter0100.one2xs.providers", true);
 
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
