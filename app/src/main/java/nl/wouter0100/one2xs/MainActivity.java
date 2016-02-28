@@ -151,7 +151,9 @@ public class MainActivity extends AppCompatActivity
 
         // Set all views values
         usernameView.setText(mAccount.name);
-        statusView.setText(mAccountManager.getUserData(mAccount, "status"));
+
+        String status = mAccountManager.getUserData(mAccount, "status");
+        statusView.setText((status == null) ? getText(R.string.still_receiving) : status);
 
         try {
             Bitmap avatar = BitmapFactory.decodeStream(mContext.openFileInput("avatar.png"));
