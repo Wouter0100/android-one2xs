@@ -3,6 +3,8 @@ package nl.wouter0100.one2xs;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,9 +20,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.FileNotFoundException;
 
 import nl.wouter0100.one2xs.fragments.ForumFragment;
 
@@ -83,8 +88,18 @@ public class MainActivity extends AppCompatActivity
             }
 
             TextView usernameView = (TextView) navigationHeader.findViewById(R.id.text_username);
+            TextView statusView = (TextView) navigationHeader.findViewById(R.id.text_status);
+            ImageView avatarView = (ImageView) navigationHeader.findViewById(R.id.image_avatar);
 
             usernameView.setText(mAccount.name);
+            statusView.setText(mAccountManager.getUserData(mAccount, "status"));
+
+            try {
+                Bitmap avatar = BitmapFactory.decodeStream(mContext.openFileInput("avatar.png"));
+                avatarView.setImageBitmap(avatar);
+            } catch (FileNotFoundException e) {
+                // avatar not found
+            }
         } else {
             // No accounts yet
             navigationHeader.setOnClickListener(new View.OnClickListener() {

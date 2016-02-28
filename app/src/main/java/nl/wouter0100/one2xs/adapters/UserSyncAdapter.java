@@ -6,12 +6,23 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import nl.wouter0100.one2xs.One2xsAuthenticator;
 import nl.wouter0100.one2xs.utilities.LoginUtilities;
@@ -20,10 +31,12 @@ import nl.wouter0100.one2xs.utilities.RequestUtilities;
 public class UserSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final AccountManager mAccountManager;
+    private final Context mContext;
 
     public UserSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
+        mContext = context;
         mAccountManager = AccountManager.get(context);
     }
 
@@ -46,7 +59,56 @@ public class UserSyncAdapter extends AbstractThreadedSyncAdapter {
             Response profileResponse = RequestUtilities.get(profileConnection);
             Document profileDocument = profileResponse.parse();
 
-            System.out.println(profileDocument.html());
+            Element table = profileDocument.getElementById("content").select("table").first();
+
+            for (Element tableRows : table.select("tr")) {
+                Elements tableData = tableRows.select("td");
+
+                String key = tableData.first().text();
+                Element value = tableData.last();
+
+                switch(key) {
+                    case "Status":
+                        mAccountManager.setUserData(account, "status", value.text());
+                        break;
+
+                    case "Lid sinds":
+                        mAccountManager.setUserData(account, "member_since", value.text());
+                        break;
+
+                    case "Referral van":
+                        mAccountManager.setUserData(account, "referral_of", value.text());
+                        break;
+
+                    case "Aantal posts":
+                        mAccountManager.setUserData(account, "post_count", value.text().replace(".", ""));
+                        break;
+
+                    case "Locatie":
+                        mAccountManager.setUserData(account, "location", value.text());
+                        break;
+
+                    case "Avatar":
+                        mAccountManager.setUserData(account, "avatar_uri", value.select("img").first().attr("src"));
+                        break;
+                }
+            }
+
+            // Download avatar
+            String avatarUri = mAccountManager.getUserData(account, "avatar_uri");
+
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext).build();
+
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            imageLoader.init(config);
+
+            Bitmap avatarBitmap = imageLoader.loadImageSync(avatarUri);
+
+            OutputStream avatarOutputStream = mContext.openFileOutput("avatar.png", Context.MODE_PRIVATE);
+
+            avatarBitmap.compress(Bitmap.CompressFormat.PNG, 100, avatarOutputStream);
+
+            avatarOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
