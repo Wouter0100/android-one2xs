@@ -25,8 +25,13 @@ public class LoginUtilities {
             Response loginResponse = RequestUtilities.post(loginConnection);
             Document loginDocument = loginResponse.parse();
 
-            if (loginDocument.getElementsByClass("error").first() == null && loginResponse.cookie("store[88-159-157]") != null) {
-                return loginResponse.cookie("store[88-159-157]");
+            if (loginDocument.getElementsByClass("error").first() == null) {
+                for (String key : loginResponse.cookies().keySet()) {
+                    if (key.startsWith("store")) {
+                        return key + "=" + loginResponse.cookie(key);
+                    }
+                }
+                throw new LoginException("Unable to find login cookie");
             } else {
                 throw new LoginException(loginDocument.getElementsByClass("error").first().text());
             }

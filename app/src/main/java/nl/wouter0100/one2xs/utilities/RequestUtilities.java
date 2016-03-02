@@ -8,7 +8,13 @@ import java.io.IOException;
 public class RequestUtilities {
 
     public static Connection setAuthToken(Connection connection, String authToken) {
-        return connection.cookie("store[88-159-157]", authToken);
+        String[] authTokenSplit = authToken.split("=");
+
+        if (authTokenSplit.length < 2) {
+            return connection;
+        }
+
+        return connection.cookie(authTokenSplit[0], authTokenSplit[1]);
     }
 
     public static Response post(Connection connection) throws IOException {
