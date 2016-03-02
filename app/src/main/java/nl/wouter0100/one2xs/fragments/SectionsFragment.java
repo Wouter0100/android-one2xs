@@ -76,7 +76,7 @@ public class SectionsFragment extends Fragment {
         sections[2] = new Section("Overige", overigeForums);
 
         // Set Pager adapter
-        mAdapter = new SectionsPagerAdapter(getFragmentManager(), sections);
+        mAdapter = new SectionsPagerAdapter(getChildFragmentManager(), sections);
 
         mPager = (ViewPager) view.findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
