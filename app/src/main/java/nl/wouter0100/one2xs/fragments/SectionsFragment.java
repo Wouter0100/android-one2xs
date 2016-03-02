@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import nl.wouter0100.one2xs.R;
-import nl.wouter0100.one2xs.adapters.SectionPagerAdapter;
+import nl.wouter0100.one2xs.adapters.SectionsPagerAdapter;
 import nl.wouter0100.one2xs.models.Forum;
 import nl.wouter0100.one2xs.models.Section;
 
@@ -20,7 +20,7 @@ import nl.wouter0100.one2xs.models.Section;
  */
 public class SectionsFragment extends Fragment {
 
-    private SectionPagerAdapter mAdapter;
+    private SectionsPagerAdapter mAdapter;
     private ViewPager mPager;
 
     public SectionsFragment() {
@@ -76,7 +76,7 @@ public class SectionsFragment extends Fragment {
         sections[2] = new Section("Overige", overigeForums);
 
         // Set Pager adapter
-        mAdapter = new SectionPagerAdapter(getFragmentManager(), sections);
+        mAdapter = new SectionsPagerAdapter(getFragmentManager(), sections);
 
         mPager = (ViewPager) view.findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);

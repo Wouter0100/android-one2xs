@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import nl.wouter0100.one2xs.fragments.ForumsFragment;
 import nl.wouter0100.one2xs.models.Section;
 
-public class SectionPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private Section[] mSections;
 
-    public SectionPagerAdapter(FragmentManager fm, Section[] sections) {
+    public SectionsPagerAdapter(FragmentManager fm, Section[] sections) {
         super(fm);
 
         this.mSections = sections;
