@@ -5,8 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import nl.wouter0100.one2xs.fragments.ForumFragment;
-import nl.wouter0100.one2xs.models.Forum;
+import nl.wouter0100.one2xs.fragments.ForumsFragment;
 import nl.wouter0100.one2xs.models.Section;
 
 public class SectionPagerAdapter extends FragmentPagerAdapter {
@@ -26,7 +25,7 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return ForumFragment.newInstance(mSections[position].getSubforums());
+        return ForumsFragment.newInstance(mSections[position].getSubforums());
     }
 
     @Override

@@ -1,7 +1,5 @@
 package nl.wouter0100.one2xs.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,14 +16,14 @@ import nl.wouter0100.one2xs.models.Forum;
 import nl.wouter0100.one2xs.models.Section;
 
 /**
- * SectionFragment, shows the sections and within it there forums
+ * SectionsFragment, shows the sections and within it there forums
  */
-public class SectionFragment extends Fragment {
+public class SectionsFragment extends Fragment {
 
     private SectionPagerAdapter mAdapter;
     private ViewPager mPager;
 
-    public SectionFragment() {
+    public SectionsFragment() {
         // Required empty public constructor
     }
 
@@ -33,10 +31,10 @@ public class SectionFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment SectionFragment.
+     * @return A new instance of fragment SectionsFragment.
      */
-    public static SectionFragment newInstance() {
-        return new SectionFragment();
+    public static SectionsFragment newInstance() {
+        return new SectionsFragment();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class SectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_section, container, false);
+        View view = inflater.inflate(R.layout.fragment_sections, container, false);
 
         // TODO: automatically receive from one2xs, it may be different depending on the user
         Section[] sections = new Section[3];

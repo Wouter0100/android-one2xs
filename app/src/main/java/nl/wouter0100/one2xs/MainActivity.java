@@ -8,14 +8,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,16 +28,16 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 
 import nl.wouter0100.one2xs.adapters.UserSyncAdapter;
-import nl.wouter0100.one2xs.fragments.ForumFragment;
-import nl.wouter0100.one2xs.fragments.MessageFragment;
-import nl.wouter0100.one2xs.fragments.SectionFragment;
-import nl.wouter0100.one2xs.fragments.ThreadFragment;
+import nl.wouter0100.one2xs.fragments.ForumsFragment;
+import nl.wouter0100.one2xs.fragments.MessagesFragment;
+import nl.wouter0100.one2xs.fragments.SectionsFragment;
+import nl.wouter0100.one2xs.fragments.ThreadsFragment;
 import nl.wouter0100.one2xs.models.Forum;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ForumFragment.OnForumInteractionListener,
-        MessageFragment.OnMessageInteractionListener,
+        ForumsFragment.OnForumInteractionListener,
+        MessagesFragment.OnMessageInteractionListener,
         FragmentManager.OnBackStackChangedListener {
 
     private AccountManager mAccountManager;
@@ -228,11 +224,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_forum:
-                fragmentClass = SectionFragment.class;
+                fragmentClass = SectionsFragment.class;
                 break;
 
             case R.id.nav_messages:
-                fragmentClass = MessageFragment.class;
+                fragmentClass = MessagesFragment.class;
                 break;
         }
 
@@ -281,7 +277,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onForumSelected(Forum forum) {
-        Fragment fragment = ThreadFragment.newInstance(forum);
+        Fragment fragment = ThreadsFragment.newInstance(forum);
 
         mFragmentManager.beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }

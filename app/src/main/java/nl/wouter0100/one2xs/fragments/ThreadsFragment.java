@@ -1,7 +1,5 @@
 package nl.wouter0100.one2xs.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,13 +15,13 @@ import nl.wouter0100.one2xs.R;
 import nl.wouter0100.one2xs.models.Forum;
 
 /**
- * ThreadFragment, view a threads list
+ * ThreadsFragment, view a threads list
  */
-public class ThreadFragment extends Fragment {
+public class ThreadsFragment extends Fragment {
 
     private Forum mForum;
 
-    public ThreadFragment() {
+    public ThreadsFragment() {
         // Required empty public constructor
     }
 
@@ -31,10 +29,10 @@ public class ThreadFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment ThreadFragment.
+     * @return A new instance of fragment ThreadsFragment.
      */
-    public static ThreadFragment newInstance(Forum forum) {
-        ThreadFragment fragment = new ThreadFragment();
+    public static ThreadsFragment newInstance(Forum forum) {
+        ThreadsFragment fragment = new ThreadsFragment();
 
         Bundle args = new Bundle();
         args.putSerializable("forum", forum);
@@ -53,7 +51,7 @@ public class ThreadFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_thread, container, false);
+        View view = inflater.inflate(R.layout.fragment_threads, container, false);
 
         ((TextView) view.findViewById(R.id.threads_forum_name)).setText(mForum.getName());
 

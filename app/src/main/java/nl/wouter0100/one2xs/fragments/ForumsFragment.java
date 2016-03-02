@@ -1,7 +1,6 @@
 package nl.wouter0100.one2xs.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -17,7 +16,7 @@ import nl.wouter0100.one2xs.models.Forum;
 /**
  * Forum Fragment, views a list of forums within a section
  */
-public class ForumFragment extends ListFragment {
+public class ForumsFragment extends ListFragment {
 
     // Listener to talk with our activity
     private OnForumInteractionListener mListener;
@@ -26,12 +25,12 @@ public class ForumFragment extends ListFragment {
     private Forum[] mForums;
 
     /**
-     * Create a new instance of ForumFragment
+     * Create a new instance of ForumsFragment
      *
      * @param forums An subforum object with all necressey details
      */
-    public static ForumFragment newInstance(Forum[] forums) {
-        ForumFragment fragment = new ForumFragment();
+    public static ForumsFragment newInstance(Forum[] forums) {
+        ForumsFragment fragment = new ForumsFragment();
 
         Bundle args = new Bundle();
         args.putSerializable("forums", forums);
@@ -56,7 +55,7 @@ public class ForumFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_forum, container, false);
+        return inflater.inflate(R.layout.fragment_forums, container, false);
     }
 
     /**

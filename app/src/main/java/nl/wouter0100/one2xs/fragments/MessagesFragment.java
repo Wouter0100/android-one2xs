@@ -1,7 +1,6 @@
 package nl.wouter0100.one2xs.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,17 +12,17 @@ import android.view.ViewGroup;
 
 import nl.wouter0100.one2xs.R;
 
-public class MessageFragment extends Fragment {
+public class MessagesFragment extends Fragment {
 
     private OnMessageInteractionListener mListener;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public MessageFragment() {
+    public MessagesFragment() {
         // Required empty public constructor
     }
 
-    public static MessageFragment newInstance() {
-        return new MessageFragment();
+    public static MessagesFragment newInstance() {
+        return new MessagesFragment();
     }
 
     @Override
@@ -34,7 +33,7 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_message, container, false);
+        View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
