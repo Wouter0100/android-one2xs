@@ -219,21 +219,17 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = null;
 
-        Class fragmentClass = null;
-
-        // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.nav_forum:
-                fragmentClass = SectionsFragment.class;
-                break;
-
-            case R.id.nav_messages:
-                fragmentClass = MessagesFragment.class;
-                break;
-        }
-
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            // Handle navigation view item clicks here.
+            switch (item.getItemId()) {
+                case R.id.nav_forum:
+                    fragment = SectionsFragment.newInstance();
+                    break;
+
+                case R.id.nav_messages:
+                    fragment = MessagesFragment.newInstance();
+                    break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
