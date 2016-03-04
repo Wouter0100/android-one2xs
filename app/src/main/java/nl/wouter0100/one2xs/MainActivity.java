@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity
 
     private Context mContext;
 
-    private FloatingActionButton mFloatingActionButton;
     private NavigationView mNavigationView;
 
     private BroadcastReceiver mUserSyncFinishedReceiver;
@@ -83,10 +81,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         mDrawerToggle.syncState();
-
-        // Floaitng action button stuff
-        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        mFloatingActionButton.setVisibility(View.INVISIBLE);
 
         // Navigation
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);

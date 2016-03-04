@@ -61,8 +61,7 @@ public class ThreadsFragment extends Fragment {
         actionBar.setTitle(mForum.getName());
 
         // Visible the FAB
-        FloatingActionButton floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        floatingActionButton.setVisibility(View.VISIBLE);
+        FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

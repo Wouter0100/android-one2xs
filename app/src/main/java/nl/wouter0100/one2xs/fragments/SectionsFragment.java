@@ -1,5 +1,7 @@
 package nl.wouter0100.one2xs.fragments;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -96,5 +98,25 @@ public class SectionsFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         ActionBar actionBar = activity.getSupportActionBar();
         actionBar.setTitle(R.string.forum);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().findViewById(R.id.appbar).setElevation(0);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        System.out.println("test");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            System.out.println("test2");
+            getActivity().findViewById(R.id.appbar).setElevation(getResources().getDimension(R.dimen.app_bar_elevation));
+        }
     }
 }
