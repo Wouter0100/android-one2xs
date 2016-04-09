@@ -159,9 +159,9 @@ public class AuthenticatorActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Intent res) {
-                if (res.hasExtra(KEY_ERROR_MESSAGE)) {
-                    progressDialog.dismiss();
+                progressDialog.dismiss();
 
+                if (res.hasExtra(KEY_ERROR_MESSAGE)) {
                     Snackbar.make(findViewById(R.id.snackbarPosition), res.getStringExtra(KEY_ERROR_MESSAGE), Snackbar.LENGTH_LONG)
                             .show();
                 } else {
